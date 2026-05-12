@@ -12,6 +12,8 @@
       --mobile-event-gap: 1.25rem;
       --desktop-column-max: 500px;
       --mobile-column-max: 400px;
+      --desktop-img-max-height: 600px;
+      --mobile-img-max-height: 350px;
       --year-size: 0.95rem;
       --title-size: 1.2rem;
       --description-size: 1rem;
@@ -134,8 +136,11 @@
 
     .event-image {
       display: block;
-      width: 100%;
+      width: auto;
       height: auto;
+      max-width: 100%;
+      max-height: var(--desktop-img-max-height);
+      object-fit: contain;
       margin-top: 0.85rem;
       margin-bottom: 0.85rem;
       border-radius: 8px;
@@ -216,6 +221,10 @@
       .timeline-event:nth-child(odd) .event-image,
       .timeline-event:nth-child(even) .event-image {
         margin-right: 0;
+      }
+
+      .event-image {
+        max-height: var(--mobile-img-max-height);
       }
     }
 
