@@ -30,10 +30,19 @@
       line-height: 1.5;
     }
 
+    .timeline-wrap {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+
     .timeline {
       list-style: none;
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
+      width: 100%;
       max-width: 1100px;
       position: relative;
     }
@@ -157,13 +166,19 @@
     }
 
     @media (max-width: 900px) {
+      .timeline {
+        width: min(100%, calc(var(--mobile-column-max) + 40px));
+        margin: 0 auto;
+      }
+
       .timeline-event {
-        grid-template-columns: 10% 90%;
+        grid-template-columns: 40px minmax(0, var(--mobile-column-max));
         margin-bottom: var(--mobile-event-gap);
+        justify-content: center;
       }
 
       .timeline::before {
-        left: 5%;
+        left: 20px;
       }
 
       .timeline-event:last-child {
@@ -175,8 +190,8 @@
         text-align: left;
         padding: 0.25rem 0.5rem 0.25rem 1rem;
         width: 100%;
-        max-width: var(--mobile-column-max);
-        justify-self: stretch;
+        max-width: 100%;
+        justify-self: center;
       }
 
       .timeline-event:nth-child(odd) .timeline-content,
@@ -213,53 +228,10 @@
   </style>
 </head>
 <body>
+  <div class="timeline-wrap">
   <ul class="timeline" aria-label="Timeline">
     <li class="timeline-event">
       <article class="timeline-content">
-        <p class="event-year">2016</p>
-        <h3 class="event-title">Started Product Design Program</h3>
-        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
-      </article>
-      <div class="timeline-axis" aria-hidden="true">
-        <span class="timeline-dot"></span>
-      </div>
-      <div class="timeline-spacer" aria-hidden="true"></div>
-    </li>
-    <li class="timeline-event">
-      <article class="timeline-content">
-        <p class="event-year">2016</p>
-        <h3 class="event-title">Started Product Design Program</h3>
-        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
-      </article>
-      <div class="timeline-axis" aria-hidden="true">
-        <span class="timeline-dot"></span>
-      </div>
-      <div class="timeline-spacer" aria-hidden="true"></div>
-    </li>
-    <li class="timeline-event">
-      <article class="timeline-content">
-        <p class="event-year">2016</p>
-        <h3 class="event-title">Started Product Design Program</h3>
-        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
-      </article>
-      <div class="timeline-axis" aria-hidden="true">
-        <span class="timeline-dot"></span>
-      </div>
-      <div class="timeline-spacer" aria-hidden="true"></div>
-    </li>
-    <li class="timeline-event">
-      <article class="timeline-content">
-        <p class="event-year">2016</p>
-        <h3 class="event-title">Started Product Design Program</h3>
-        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
-      </article>
-      <div class="timeline-axis" aria-hidden="true">
-        <span class="timeline-dot"></span>
-      </div>
-      <div class="timeline-spacer" aria-hidden="true"></div>
-    </li>
-    <li class="timeline-event">
-      <article class="timeline-content">
         <p class="event-year">2019</p>
         <h3 class="event-title">Joined Studio Collective</h3>
         <p class="event-description">Collaborated on cross-disciplinary client projects in branding, web experience, and visual systems.</p>
@@ -307,18 +279,50 @@
       </div>
       <div class="timeline-spacer" aria-hidden="true"></div>
     </li>
-
     <li class="timeline-event">
       <article class="timeline-content">
-        <p class="event-year">2022</p>
-        <h3 class="event-title">Launched First Independent Product</h3>
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Expanded to International Team</h3>
+        <img class="event-image" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="Remote team in a video collaboration meeting" />
       </article>
       <div class="timeline-axis" aria-hidden="true">
         <span class="timeline-dot"></span>
       </div>
       <div class="timeline-spacer" aria-hidden="true"></div>
     </li>
-
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Expanded to International Team</h3>
+        <img class="event-image" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="Remote team in a video collaboration meeting" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Expanded to International Team</h3>
+        <img class="event-image" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="Remote team in a video collaboration meeting" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Expanded to International Team</h3>
+        <img class="event-image" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="Remote team in a video collaboration meeting" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
     <li class="timeline-event">
       <article class="timeline-content">
         <p class="event-year">2025</p>
@@ -331,6 +335,7 @@
       <div class="timeline-spacer" aria-hidden="true"></div>
     </li>
   </ul>
+  </div>
 
   <script>
     (function () {
