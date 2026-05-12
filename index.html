@@ -10,6 +10,7 @@
       --timeline-dot-color: #A13E66;
       --timeline-dot-size: 14px;
       --mobile-event-gap: 1.25rem;
+      --mobile-timeline-right-gap: 0.75rem;
       --event-gap: 2.25rem;
       --desktop-column-max: 500px;
       --mobile-column-max: 400px;
@@ -195,6 +196,7 @@
         grid-template-columns: 40px minmax(0, var(--mobile-column-max));
         margin-bottom: var(--event-gap);
         justify-content: center;
+        column-gap: var(--mobile-timeline-right-gap);
         --enter-x: 24px;
       }
 
