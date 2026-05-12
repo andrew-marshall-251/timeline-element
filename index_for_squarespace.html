@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Timeline</title>
+  <style>
+    :root {
+      --timeline-line-color: #BBB332;
+      --timeline-dot-color: #A13E66;
+      --timeline-dot-size: 14px;
+      --mobile-event-gap: 1.25rem;
+      --mobile-timeline-right-gap: 1.25rem;
+      --event-gap: 2.25rem;
+      --desktop-column-max: 500px;
+      --mobile-column-max: 400px;
+      --desktop-img-max-height: 400px;
+      --mobile-img-max-height: 300px;
+      --image-margin-bottom: 1.5rem;
+      --year-color: #8B8B8B;
+      --year-size: 18px;
+      --title-size: 24px;
+      --description-size: 18px;
+      --body-text: #111827;
+      --bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--body-text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    .timeline-wrap {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 1100px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      transform: translateX(-50%);
+      background: var(--timeline-line-color);
+      z-index: 0;
+    }
+
+    .timeline-event {
+      display: grid;
+      grid-template-columns: 47.5% 5% 47.5%;
+      align-items: stretch;
+      position: relative;
+      min-height: 120px;
+      margin-bottom: var(--event-gap);
+      --enter-x: -24px;
+    }
+
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-event.is-visible .timeline-content {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .timeline-content,
+    .timeline-spacer {
+      width: 100%;
+      min-height: 100%;
+      max-width: var(--desktop-column-max);
+      padding: 1rem 1.25rem;
+    }
+
+    .timeline-content,
+    .timeline-axis,
+    .timeline-spacer {
+      grid-row: 1;
+    }
+
+    .timeline-content {
+      display: block;
+      opacity: 0;
+      transform: translateX(var(--enter-x));
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+
+    .timeline-event:nth-child(odd) .timeline-content {
+      --enter-x: 24px;
+    }
+
+    .timeline-axis {
+      position: relative;
+      min-height: 100%;
+      z-index: 1;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--timeline-dot-color);
+      z-index: 1;
+    }
+
+    .event-year {
+      margin: 0 0 0.25rem;
+      font-size: var(--year-size);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--year-color);
+    }
+
+    .event-title {
+      margin: 0 0 0.45rem;
+      font-size: var(--title-size);
+      line-height: 1.3;
+    }
+
+    .event-description {
+      margin: 0;
+      font-size: var(--description-size);
+      color: #1f2937;
+    }
+
+    .event-image {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: var(--desktop-img-max-height);
+      object-fit: contain;
+      margin-top: 0.85rem;
+      margin-bottom: var(--image-margin-bottom);
+      border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    }
+
+    .timeline-event:nth-child(odd) .timeline-content {
+      grid-column: 3;
+      justify-self: start;
+    }
+
+    .timeline-event:nth-child(odd) .timeline-spacer {
+      grid-column: 1;
+    }
+
+    .timeline-event:nth-child(even) .timeline-content {
+      grid-column: 1;
+      text-align: right;
+      justify-self: end;
+    }
+
+    .timeline-event:nth-child(even) .timeline-spacer {
+      grid-column: 3;
+    }
+
+    .timeline-event:nth-child(even) .event-image {
+      margin-left: auto;
+    }
+
+    .timeline-axis {
+      grid-column: 2;
+    }
+
+    @media (max-width: 900px) {
+      .timeline {
+        width: min(100%, calc(var(--mobile-column-max) + 40px));
+        margin: 0 auto;
+      }
+
+      .timeline-event {
+        grid-template-columns: 40px minmax(0, var(--mobile-column-max));
+        margin-bottom: var(--event-gap);
+        justify-content: center;
+        column-gap: var(--mobile-timeline-right-gap);
+        --enter-x: 24px;
+      }
+
+      .timeline::before {
+        left: 20px;
+      }
+
+      .timeline-content {
+        grid-column: 2;
+        text-align: left;
+        padding: 0.25rem 0.5rem 0.25rem 1rem;
+        width: 100%;
+        max-width: 100%;
+        justify-self: center;
+      }
+
+      .timeline-event:nth-child(odd) .timeline-content,
+      .timeline-event:nth-child(even) .timeline-content {
+        grid-column: 2;
+        text-align: left;
+      }
+
+      .timeline-spacer {
+        display: none;
+      }
+
+      .timeline-axis {
+        grid-column: 1;
+      }
+
+      .timeline-event:nth-child(even) .event-image {
+        margin-left: 0;
+      }
+
+      .timeline-event:nth-child(odd) .event-image,
+      .timeline-event:nth-child(even) .event-image {
+        margin-right: 0;
+      }
+
+      .event-image {
+        max-height: var(--mobile-img-max-height);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-content {
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="timeline-wrap">
+  <ul class="timeline" aria-label="Timeline">
+
+    <!--- 1 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">November 20, 1910</p>
+        <h3 class="event-title">Pauli Murray Born</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/45164879-a756-4858-a233-351ef2f8b40f/1.png?content-type=image%2Fpng" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Pauli Murray was born in Baltimore, Maryland to Agnes Fitzgerald and William Murray.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 2 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1914</p>
+        <h3 class="event-title">Pauli Moves to Durham</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/67606249-046c-4f8f-bf84-51d8add3dfac/2.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Pauli Murray moves to Durham to live with their aunt, Pauline Fitzgerald Dame. Agnes had died of a cerebral hemorrhage and William was unable to care for the six children.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 3 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1923</p>
+        <h3 class="event-title">Pauli’s Father Murdered</h3>
+        <p class="event-description">William Murray is murdered at Crownsville State Hospital by a white guard.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 4 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1926</p>
+        <h3 class="event-title">Pauli Graduates High School</h3>
+        <p class="event-description">Murray graduates from Hillside High with a certificate of distinction. They received another high school diploma from Richmond Hills High School in New York in 1927 so that s/he could meet entrance requirements at Hunter College.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 5 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1933</p>
+        <h3 class="event-title">Pauli Graduates College</h3>
+        <p class="event-description">Murray graduates from Hunter College and goes to work for the Works Project Admission (WPA), Workers Defense League, and as a teacher in the NYC Remedial Reading Project.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 6 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1937</p>
+        <h3 class="event-title">Pauli Seeks Gender Affirming Treatment</h3>
+        <p class="event-description">Murray seeks gender-affirming medical treatment, including hormone therapy.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 7 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1938</p>
+        <h3 class="event-title">Pauli Denied from UNC</h3>
+        <p class="event-description">S/he attempts to gain admission as a graduate student at the University of North Carolina at Chapel Hill. S/he is rejected due to racism. While the NAACP supports Murray in challenging the school’s segregationist policies, they decide not to pursue the case.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 8 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1940</p>
+        <h3 class="event-title">Fellowship of Reconciliation</h3>
+        <p class="event-description">Murray joins the Fellowship of Reconciliation. While traveling through Virginia, s/he is arrested and jailed for refusing to sit on the back of a segregated bus.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 9 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1941</p>
+        <h3 class="event-title">Howard Law School</h3>
+        <p class="event-description">S/he enters Howard Law School and is the only non-cisgender man in their class.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 10 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1942</p>
+        <h3 class="event-title">Odell Waller Executed</h3>
+        <p class="event-description">Odell Waller is executed. Murray writes a letter to President Franklin D. Roosevelt on behalf of outraged leaders. S/he criticizes the presidents’ failure to improve conditions for Black southerners.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 11 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1943</p>
+        <h3 class="event-title">Pauli Publishes Article in Common Sense</h3>
+        <p class="event-description">Murray publishes “Negroes are Fed Up” in Common Sense and an article about the Harlem race riot in the socialist newspaper New York Call. S/he also publishes their famous poem on race relations, “Dark Testament,” in the winter issue of South Today.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 12 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1944</p>
+        <h3 class="event-title">Pauli Graduates Law School</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/faef70bc-5653-4a9d-b12b-c0e12316cfbc/12.png?content-type=image%2Fpng" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Murray graduates from Howard Law School first in their class. S/he wins a prestigious fellowship and applies to Harvard Law. S/he is rejected because of her gender despite having President Roosevelt (an alumni of Harvard) write a letter on their behalf. S/he enrolls at University of California’s Boalt Hall Law School to work on a graduate degree in law.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 13 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1945</p>
+        <h3 class="event-title">Receives Berkley Degree</h3>
+        <p class="event-description">S/he received a Masters of Law degree (L.L.M.) from University of California, Berkeley. Their master’s thesis is entitled, “The Right to Equal Opportunity in Employment.” S/he passes the California state bar.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 14 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1945</p>
+        <h3 class="event-title">Pauli’s Aunt Retires</h3>
+        <p class="event-description">Aunt Pauline retires after teaching for 60 years and moves to NYC to live with Murray.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 15 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1947</p>
+        <h3 class="event-title">Pauli Receives Award</h3>
+        <p class="event-description">Murray is named “Merit Award Winner” by Mademoiselle magazine for their legal work against racial and gender discrimination.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 16 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1948</p>
+        <h3 class="event-title">Enters NYC City Council Race</h3>
+        <p class="event-description">Murray runs for and receives the fourth-highest vote total in the New York City council race for Brooklyn’s tenth Senatorial district.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 17 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1951</p>
+        <h3 class="event-title">Wrote Important Law Compilation</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/b57d0908-2917-4319-8637-a7c81d073204/17.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 18 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1952</p>
+        <h3 class="event-title">Falls Victim to McCarthyism</h3>
+        <p class="event-description">Murray is rejected for a U.S. State Department position administered at Cornell University because the people who supplied their references, Eleanor Roosevelt, Thurgood Marshall, and A. Phillip Randolph, are considered to be “too radical.”</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 19 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1955</p>
+        <h3 class="event-title">Aunt Pauline Dies</h3>
+        <p class="event-description">Pauli Murray’s Aunt Pauline dies. On her deathbed, Pauli reads to her from the Book of Common Prayer.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+
+    <!--- 20 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1956</p>
+        <h3 class="event-title">Proud Shoes Published</h3>
+        <p class="event-description">Pauli Murray’s seminal work Proud Shoes: The Story of an American Family, a biography of their maternal grandparents, their struggles with racial prejudice, and early Durham history is published.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 21 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1956</p>
+        <h3 class="event-title">Pauli is Hired at NY Firm</h3>
+        <p class="event-description">S/he is the only non-cisgender man hired by the NY firm of Paul, Weiss, Rifkin, Wharton, and Garrison. There, Murray meets their long-term romantic partner, Irene Barlow.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 22 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1960</p>
+        <h3 class="event-title">Travels to Ghana</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/17927e67-61a9-4db6-b449-6169d1080470/22.png?content-type=image%2Fpng" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Murray travels to Ghana and takes a position as a senior lecturer at the Ghana School of Law in Accra.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 23 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1961</p>
+        <h3 class="event-title">JFK Gives Pauli a Political Appointment</h3>
+        <p class="event-description">John F. Kennedy appoints Murray to the President’s Commission on the Status of Women Committee (PCSW) on Civil and Political Rights. Murray works with A. Phillip Randolph, Bayard Rustin and Martin L. King, Jr. on civil rights.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 24 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1964</p>
+        <h3 class="event-title">Civil Rights Act Passed</h3>
+        <p class="event-description">U.S. Civil Rights Act passed. Murray co-authors “Jane Crow and the Law: Sex discrimination and Title VII,” in which s/he draws parallels between sex-based discrimination with Jim Crow laws.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 25 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1965</p>
+        <h3 class="event-title">Receives J.S.D. from Yale</h3>
+        <p class="event-description">Murray receives a J.S.D from Yale, the first African-American to receive this degree from Yale. Their dissertation was entitled “Roots of the Racial Crisis: Prologue to Policy.”</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 26 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1965-1966</p>
+        <h3 class="event-title">Pauli Serves on Co-Counsel</h3>
+        <p class="event-description">Murray serves as co-counsel in White v. Crook, which successfully eliminates the use of sex and race discrimination in jury selection.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 27 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1965-1973</p>
+        <h3 class="event-title">Pauli Serves on ACLU Board</h3>
+        <p class="event-description">Murray serves on the National Board of Directors for the American Civil Liberties Union (ACLU).</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 28 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1966</p>
+        <h3 class="event-title">Pauli Founds NOW</h3>
+        <p class="event-description">Along with Betty Friedan and thirty others, Murray becomes a founding member of National Organization for Women (NOW).</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 29 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1967</p>
+        <h3 class="event-title">Works at Benedict College</h3>
+        <p class="event-description">Murray serves as vice-president of Benedict College in Columbia, SC.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 30 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1968-1973</p>
+        <h3 class="event-title">Becomes a Professor at Brandeis</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/b402f39a-aba0-4576-91a8-6d2336af916b/30.png?content-type=image%2Fpng" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Murray is tenured as Professor of Law and Politics at Brandeis University.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 31 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1973</p>
+        <h3 class="event-title">Starts Divinity Education</h3>
+        <p class="event-description">At age 62, Murray entered General Theological Seminary prior to the Episcopal Church’s approval of women as candidates for ordination.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 32 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">December 8, 1977</p>
+        <h3 class="event-title">Becomes a Priest</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/e5fa70be-c5a8-46f3-b1b3-6831e0a09f2e/32.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Pauli Murray becomes the first Black person perceived as a woman to be ordained by the Protestant Episcopal Church. S/he offered the Eucharist for the first time on February 13 at Chapel of the Cross, Chapel Hill, NC where their grandmother Cornelia was baptized as an enslaved person.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 33 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1982</p>
+        <h3 class="event-title">Pauli Retires</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/d4f0697f-7798-4708-a892-8012609f29d1/33.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Murray is forced to retire because Episcopal Church law requires retirement at age seventy-two.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 34 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">July 1, 1985</p>
+        <h3 class="event-title">Pauli Murray Dies</h3>
+        <p class="event-description">Pauli Murray dies in Pittsburgh, PA.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 35 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">1987</p>
+        <h3 class="event-title">Pauli’s Autobiography Published</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/76f7c59d-8952-4975-9243-ae4129bec7a6/35.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">Pauli Murray’s autobiography Song in a Weary Throat: An American Pilgrimage is published.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 36 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2011</p>
+        <h3 class="event-title">Highway Marker Honors Murray</h3>
+        <img class="event-image" src="https://images.squarespace-cdn.com/content/6a031d708a20597e9093355b/d4023369-64e7-4276-abf9-8194efb97670/36.jpg?content-type=image%2Fjpeg" alt="Designer reviewing layouts on a laptop in a studio" />
+        <p class="event-description">N.C. Department of Archives and History installs a state highway historic marker honoring Pauli Murray ¼ mile north of her childhood home in Durham.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 37 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2012</p>
+        <h3 class="event-title">Pauli Receives Sainthood</h3>
+        <p class="event-description">Reverend Dr. Pauli Murray is elevated to the status of sainthood by their inclusion in the Book of Holy Women, Holy Men by the General Convention of the Episcopal Church.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <!--- 38 --->
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Murray Receives Long Leaf Pine Award</h3>
+        <p class="event-description">NC Governor Stein presents the Order of the Long Leaf Pine Award posthumously to the Rev. Dr. Pauli Murray to honor their life’s work.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+  </ul>
+  </div>
+
+  <script>
+    (function () {
+      var items = document.querySelectorAll('.timeline-event');
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        items.forEach(function (item) {
+          item.classList.add('is-visible');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      items.forEach(function (item) {
+        observer.observe(item);
+      });
+    })();
+  </script>
+</body>
+</html>
