@@ -10,6 +10,7 @@
       --timeline-dot-color: #A13E66;
       --timeline-dot-size: 14px;
       --mobile-event-gap: 1.25rem;
+      --event-gap: 2.25rem;
       --desktop-column-max: 500px;
       --mobile-column-max: 400px;
       --desktop-img-max-height: 600px;
@@ -68,9 +69,14 @@
       align-items: stretch;
       position: relative;
       min-height: 120px;
+      margin-bottom: var(--event-gap);
       opacity: 0;
       transform: translateY(12px);
       transition: opacity 450ms ease, transform 450ms ease;
+    }
+
+    .timeline-event:last-child {
+      margin-bottom: 0;
     }
 
     .timeline-event.is-visible {
@@ -181,16 +187,12 @@
 
       .timeline-event {
         grid-template-columns: 40px minmax(0, var(--mobile-column-max));
-        margin-bottom: var(--mobile-event-gap);
+        margin-bottom: var(--event-gap);
         justify-content: center;
       }
 
       .timeline::before {
         left: 20px;
-      }
-
-      .timeline-event:last-child {
-        margin-bottom: 0;
       }
 
       .timeline-content {
