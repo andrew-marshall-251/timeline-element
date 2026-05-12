@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Timeline</title>
+  <style>
+    :root {
+      --timeline-line-color: #BBB332;
+      --timeline-dot-color: #A13E66;
+      --timeline-dot-size: 14px;
+      --mobile-event-gap: 1.25rem;
+      --year-size: 0.95rem;
+      --title-size: 1.2rem;
+      --description-size: 1rem;
+      --body-text: #111827;
+      --bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+      color: var(--body-text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    .timeline {
+      list-style: none;
+      margin: 0 auto;
+      padding: 0;
+      max-width: 1100px;
+    }
+
+    .timeline-event {
+      display: grid;
+      grid-template-columns: 45% 5% 45%;
+      align-items: stretch;
+      position: relative;
+      min-height: 120px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 450ms ease, transform 450ms ease;
+    }
+
+    .timeline-event.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-content,
+    .timeline-spacer {
+      width: 100%;
+      min-height: 100%;
+      padding: 1rem 1.25rem;
+    }
+
+    .timeline-content {
+      display: block;
+    }
+
+    .timeline-axis {
+      position: relative;
+      min-height: 100%;
+    }
+
+    .timeline-axis::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      transform: translateX(-50%);
+      background: var(--timeline-line-color);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--timeline-dot-color);
+      z-index: 1;
+    }
+
+    .event-year {
+      margin: 0 0 0.25rem;
+      font-size: var(--year-size);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #374151;
+    }
+
+    .event-title {
+      margin: 0 0 0.45rem;
+      font-size: var(--title-size);
+      line-height: 1.3;
+    }
+
+    .event-description {
+      margin: 0;
+      font-size: var(--description-size);
+      color: #1f2937;
+    }
+
+    .event-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 0.85rem;
+      border-radius: 8px;
+    }
+
+    .timeline-event:nth-child(odd) .timeline-content {
+      grid-column: 3;
+    }
+
+    .timeline-event:nth-child(odd) .timeline-spacer {
+      grid-column: 1;
+    }
+
+    .timeline-event:nth-child(even) .timeline-content {
+      grid-column: 1;
+      text-align: right;
+    }
+
+    .timeline-event:nth-child(even) .timeline-spacer {
+      grid-column: 3;
+    }
+
+    .timeline-event:nth-child(even) .event-image {
+      margin-left: auto;
+    }
+
+    .timeline-axis {
+      grid-column: 2;
+    }
+
+    @media (max-width: 390px) {
+      .timeline-event {
+        grid-template-columns: 10% 90%;
+        margin-bottom: var(--mobile-event-gap);
+      }
+
+      .timeline-event:last-child {
+        margin-bottom: 0;
+      }
+
+      .timeline-content {
+        grid-column: 2;
+        text-align: left;
+        padding: 0.25rem 0.5rem 0.25rem 1rem;
+      }
+
+      .timeline-spacer {
+        display: none;
+      }
+
+      .timeline-axis {
+        grid-column: 1;
+      }
+
+      .timeline-event:nth-child(even) .event-image {
+        margin-left: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-event {
+        transition: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <ul class="timeline" aria-label="Timeline">
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2016</p>
+        <h3 class="event-title">Started Product Design Program</h3>
+        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2016</p>
+        <h3 class="event-title">Started Product Design Program</h3>
+        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2016</p>
+        <h3 class="event-title">Started Product Design Program</h3>
+        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2016</p>
+        <h3 class="event-title">Started Product Design Program</h3>
+        <p class="event-description">Began formal design training with a focus on human-centered UX and rapid prototyping.</p>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2019</p>
+        <h3 class="event-title">Joined Studio Collective</h3>
+        <p class="event-description">Collaborated on cross-disciplinary client projects in branding, web experience, and visual systems.</p>
+        <img class="event-image" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Designer reviewing layouts on a laptop in a studio" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2019</p>
+        <h3 class="event-title">Joined Studio Collective</h3>
+        <p class="event-description">Collaborated on cross-disciplinary client projects in branding, web experience, and visual systems.</p>
+        <img class="event-image" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Designer reviewing layouts on a laptop in a studio" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2019</p>
+        <h3 class="event-title">Joined Studio Collective</h3>
+        <p class="event-description">Collaborated on cross-disciplinary client projects in branding, web experience, and visual systems.</p>
+        <img class="event-image" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Designer reviewing layouts on a laptop in a studio" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2019</p>
+        <h3 class="event-title">Joined Studio Collective</h3>
+        <p class="event-description">Collaborated on cross-disciplinary client projects in branding, web experience, and visual systems.</p>
+        <img class="event-image" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Designer reviewing layouts on a laptop in a studio" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2022</p>
+        <h3 class="event-title">Launched First Independent Product</h3>
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+
+    <li class="timeline-event">
+      <article class="timeline-content">
+        <p class="event-year">2025</p>
+        <h3 class="event-title">Expanded to International Team</h3>
+        <img class="event-image" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="Remote team in a video collaboration meeting" />
+      </article>
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+      </div>
+      <div class="timeline-spacer" aria-hidden="true"></div>
+    </li>
+  </ul>
+
+  <script>
+    (function () {
+      var items = document.querySelectorAll('.timeline-event');
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        items.forEach(function (item) {
+          item.classList.add('is-visible');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      items.forEach(function (item) {
+        observer.observe(item);
+      });
+    })();
+  </script>
+</body>
+</html>
