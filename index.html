@@ -15,6 +15,7 @@
       --desktop-img-max-height: 600px;
       --mobile-img-max-height: 350px;
       --year-size: 0.95rem;
+      --year-color: #8B8B8B;
       --title-size: 1.2rem;
       --description-size: 1rem;
       --body-text: #111827;
@@ -119,7 +120,7 @@
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: #374151;
+      color: var(--year-color);
     }
 
     .event-title {
@@ -144,6 +145,7 @@
       margin-top: 0.85rem;
       margin-bottom: 0.85rem;
       border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
 
     .timeline-event:nth-child(odd) .timeline-content {
