@@ -1,0 +1,54 @@
+/* Primary button */
+.sqs-block-button-element--small,
+.sqs-block-button-element--medium,
+.sqs-block-button-element--large {
+  background-color: #BFBC32 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+/* Primary button hover */
+.sqs-block-button-element--small:hover,
+.sqs-block-button-element--medium:hover,
+.sqs-block-button-element--large:hover {
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+/* Header / nav bar button */
+.header-actions .sqs-button-element--primary {
+  background-color: #BFBC32;
+  border-color: #BFBC32;
+  color: white;
+}
+
+/* Header / nav bar button */
+.header-actions .sqs-button-element--primary:hover {
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+/* Make Squarespace line block elements black (avoid global hr override) */
+.sqs-block-horizontalrule hr {
+  border: 0 !important;
+  border-top: 1px solid #000 !important;
+  background: #000 !important;
+  height: 1px !important;
+  opacity: 1 !important;
+}
+
+/* Replace XXXXXXXX with your page's collection ID */
+.collection-6a031dfc0210eb75b06a0d2e .event-title {
+  color: #000 !important;
+  font-weight: 700 !important;
+  font-size: 27px !important;
+  line-height: 1.3;
+}
+
+.sqs-html-content li:not(.timeline-event) p::before,
+  .sqs-block-content li:not(.timeline-event) p::before {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  opacity: 1 !important;
+}
+
