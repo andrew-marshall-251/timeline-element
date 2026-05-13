@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Timeline</title>
   <style>
-    :root {
+    .timeline-wrap {
       --timeline-line-color: #BBB332;
       --timeline-dot-color: #A13E66;
       --timeline-dot-size: 14px;
@@ -23,16 +23,11 @@
       --description-size: 18px;
       --body-text: #111827;
       --bg: transparent;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
+      box-sizing: border-box;
       margin: 0;
       padding: 2rem 1rem;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: var(--body-text);
-      background: var(--bg);
       line-height: 1.5;
     }
 
@@ -193,6 +188,18 @@
         width: min(100%, calc(var(--mobile-column-max) + 40px));
         margin: 0 auto;
       }
+
+      @media (max-width: 900px) {
+    .timeline-event:nth-child(odd) .timeline-content,
+    .timeline-event:nth-child(even) .timeline-content {
+      grid-column: 2 !important;
+      text-align: left !important;
+      justify-self: stretch !important; /* or start */
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+  }
 
       .timeline-event {
         grid-template-columns: 40px minmax(0, var(--mobile-column-max));
@@ -843,3 +850,4 @@
   </script>
 </body>
 </html>
+
